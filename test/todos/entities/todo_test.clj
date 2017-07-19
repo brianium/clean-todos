@@ -1,8 +1,10 @@
 (ns todos.entities.todo-test
   (:require [clojure.test :refer :all]
+            [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
-            [todos.entities.todo :as todo]))
+            [todos.entities.todo :as todo]
+            [todos.storage.todo.collection :refer [make-storage]]))
 
 
 (deftest test-make-todo
@@ -23,7 +25,12 @@
       (is (= completed completed-again)))))
 
 
+(defn storage-gen [] (s/gen #{(make-storage)}))
+(def gen-overrides {::todo/storage storage-gen})
+
+
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.entities.todo) st/check)]
+  (doseq [test-output (-> (st/enumerate-namespace 'todos.entities.todo)
+                          (st/check {:gen gen-overrides}))]
     (testing (-> test-output :sym name)
       (is (true? (-> test-output :clojure.spec.test.check/ret :result))))))
