@@ -10,4 +10,4 @@
                  [org.clojure/core.async "0.3.443"]]
 
   :profiles {:dev {:source-paths ["src" "test"]
-                   :dependencies [[org.clojure/test.check "0.9.0"]]}})
+                   :dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}})
