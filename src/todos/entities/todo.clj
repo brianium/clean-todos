@@ -8,11 +8,22 @@
 (s/def ::complete? boolean?)
 (s/def ::created-at inst?)
 (s/def ::modified-at inst?)
-(s/def ::todo (s/keys :req [::title ::complete? ::created-at ::modified-at]))
+(s/def ::todo (s/keys :req [::id ::title ::complete? ::created-at ::modified-at]))
 
-
+(s/def ::storage-error  keyword?)
 (s/def ::storage-result (s/or :todo  ::todo
-                              :error keyword?))
+                          :error ::storage-error))
+
+
+(defn storage-error?
+  "Check if the given storage result was an error"
+  [result]
+  (s/valid? ::storage-error result))
+
+
+(s/fdef storage-error?
+  :args (s/cat :result ::storage-result)
+  :ret  boolean?)
 
 
 (defn make-todo
@@ -83,5 +94,19 @@
 
 
 (s/fdef save
+  :args (s/cat :storage ::storage :todo ::todo)
+  :ret  ::storage-result)
+
+
+(defn insert
+  "Inserts a new todo into storage"
+  [storage todo]
+  (let [result (fetch storage (::id todo))]
+    (if (s/valid? ::todo result)
+      :todo/exists
+      (save storage todo))))
+
+
+(s/fdef insert
   :args (s/cat :storage ::storage :todo ::todo)
   :ret  ::storage-result)

@@ -25,7 +25,18 @@
       (is (= completed completed-again)))))
 
 
-(defn storage-gen [] (s/gen #{(make-storage)}))
+(deftest test-insert-todo
+  (let [entity  (todo/make-todo "Incomplete")
+        storage (make-storage #{entity})]
+    (testing "todo already exists"
+      (is (true? (keyword? (todo/insert storage entity)))))
+    (testing "todo is new"
+      (let [new-todo (todo/make-todo "Also not done")]
+        (is (= new-todo (todo/insert storage new-todo)))))))
+
+
+(def test-storage (make-storage))
+(defn storage-gen [] (s/gen #{test-storage}))
 (def gen-overrides {::todo/storage storage-gen})
 
 
@@ -33,4 +44,6 @@
   (doseq [test-output (-> (st/enumerate-namespace 'todos.entities.todo)
                           (st/check {:gen gen-overrides}))]
     (testing (-> test-output :sym name)
-      (is (true? (-> test-output :clojure.spec.test.check/ret :result))))))
+      (is
+        (true? (-> test-output :clojure.spec.test.check/ret :result))
+        (-> test-output :clojure.spec.test.check/ret :result-data str)))))

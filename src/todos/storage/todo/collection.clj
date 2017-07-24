@@ -3,16 +3,19 @@
   (:require [todos.entities.todo :as todo]))
 
 
-(defn- find-todo [todos id]
+(defn- find-todo
   "Naive lookup of a todo by id"
-  (let [entity (first (filter #(.equals id (::todo/id %)) todos))]
+  [todos id]
+  (let [entity (first
+                 (filter #(.equals id (::todo/id %)) todos))]
     (if entity entity :not-found)))
 
 
 (defrecord CollectionStorage [*coll]
   todo/TodoStorage
   (-fetch [_ id] (find-todo @*coll id))
-  (-save  [_ todo] (first (swap! *coll conj todo))))
+  (-save  [_ todo] (do (swap! *coll conj todo)
+                       todo)))
 
 
 (defn make-storage

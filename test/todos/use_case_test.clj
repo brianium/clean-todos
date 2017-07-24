@@ -4,12 +4,8 @@
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
             [clojure.core.async :refer [chan <!! go <! >!]]
-            [todos.use-case :as use-case]))
-
-
-(defn- test-async
-  [ch]
-  (<!! ch))
+            [todos.use-case :as use-case]
+            [todos.test :refer [test-async]]))
 
 
 (deftest test-make-use-case
