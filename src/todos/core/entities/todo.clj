@@ -1,4 +1,4 @@
-(ns todos.entities.todo
+(ns todos.core.entities.todo
   (:require [clojure.spec.alpha :as s])
   (:import (java.util Date
                       UUID)))

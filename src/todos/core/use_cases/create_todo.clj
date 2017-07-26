@@ -1,9 +1,9 @@
-(ns todos.use-cases.create-todo
+(ns todos.core.use-cases.create-todo
   (:require [clojure.core.async :refer [go-loop <! >!]]
             [clojure.spec.alpha :as s]
-            [todos.entities.todo :as todo]
-            [todos.use-case :as uc]
-            [todos.action :as action]))
+            [todos.core.entities.todo :as todo]
+            [todos.core.use-case :as uc]
+            [todos.core.action :as action]))
 
 
 (s/def ::in           ::uc/read-port)

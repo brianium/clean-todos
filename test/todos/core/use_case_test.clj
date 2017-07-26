@@ -1,10 +1,10 @@
-(ns todos.use-case-test
+(ns todos.core.use-case-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
             [clojure.core.async :refer [chan <!! go <! >!]]
-            [todos.use-case :as use-case]
+            [todos.core.use-case :as use-case]
             [todos.test :refer [test-async]]))
 
 
@@ -32,6 +32,14 @@
               (is (= x "hello"))))))))
 
 
+(deftest test-take!!
+  (let [in  (chan)
+        out (chan)
+        uc  (use-case/make-use-case in out)]
+    (go (>! out "hello"))
+    (is (= "hello" (use-case/take!! uc)))))
+
+
 (defn chan-gen [] (s/gen #{(chan)}))
 (defn channel-value-gen [] (s/gen string?))
 (defn use-case-gen [] (s/gen #{(use-case/make-use-case (chan) (chan))}))
@@ -43,8 +51,14 @@
                     ::use-case/take-handler  take-handler-gen})
 
 
+;; ignoring take!! to prevent blocking - a unit test should cover this just fine
+(def ignore #{'todos.core.use-case/take!!})
+
+
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.use-case)
-                          (st/check {:gen gen-overrides}))]
-    (testing (-> test-output :sym name)
+  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.use-case)
+                          (clojure.set/difference ignore)
+                          (st/check {:gen gen-overrides}))
+          sym (-> test-output :sym name)]
+    (testing sym
       (is (true? (-> test-output :clojure.spec.test.check/ret :result))))))
