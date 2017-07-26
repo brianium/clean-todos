@@ -1,13 +1,13 @@
-(ns todos.use-cases.create-todo-test
+(ns todos.core.use-cases.create-todo-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
             [clojure.core.async :refer [chan >! <! go]]
-            [todos.use-cases.create-todo :as ct]
-            [todos.use-case :as uc]
-            [todos.entities.todo :as todo]
-            [todos.action :as action]
+            [todos.core.use-cases.create-todo :as ct]
+            [todos.core.use-case :as uc]
+            [todos.core.entities.todo :as todo]
+            [todos.core.action :as action]
             [todos.storage.todo.collection :refer [make-storage]]
             [todos.test :refer [test-async]]))
 
@@ -50,7 +50,7 @@
 
 
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.use-cases.create-todo)
+  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.use-cases.create-todo)
                           (st/check {:gen gen-overrides}))]
     (testing (-> test-output :sym name)
       (is (true? (-> test-output :clojure.spec.test.check/ret :result))))))

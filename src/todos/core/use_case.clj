@@ -1,12 +1,13 @@
-(ns todos.use-case
-  (:require [clojure.core.async :refer [go >! <!]]
+(ns todos.core.use-case
+  (:require [clojure.core.async :as async :refer [go <! <!!]]
             [clojure.core.async.impl.protocols :refer [ReadPort WritePort]]
             [clojure.spec.alpha :as s]))
 
 
 (defprotocol UseCase
   (-put! [this value] "Place a value into the use case input port")
-  (-take! [this fn1-handler] "Take a value from the use case out put port")
+  (-take! [this fn1-handler] "Calls the given function with the next value taken from the output port")
+  (-take!! [this] "Takes a value from the output port and returns it")
   (-input [this] "Get the input port of the use case")
   (-output [this] "Get the output port of the use case"))
 
@@ -33,8 +34,9 @@
   "Creates a new use case backed by core.async"
   [in out]
   (reify UseCase
-    (-put! [_ value] (go (>! in value)))
-    (-take! [_ fn1-handler] (go (fn1-handler (<! out))))
+    (-put! [this value] (do (async/put! in value) this))
+    (-take! [this fn1-handler] (do (go (fn1-handler (<! out))) this))
+    (-take!! [_] (<!! out))
     (-input [_] in)
     (-output [_] out)))
 
@@ -72,6 +74,18 @@
 (s/fdef take!
   :args (s/cat :use-case ::use-case :fn1-handler ::take-handler)
   :ret  ::use-case)
+
+
+(defn take!!
+  "Take a value from the use case output port and return it. Blocks
+  if necessary"
+  [use-case]
+  (-take!! use-case))
+
+
+(s/fdef take!!
+  :args (s/cat :use-case ::use-case)
+  :ret  ::channel-value)
 
 
 (defn input
