@@ -14,6 +14,7 @@
   :profiles {:dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}
 
              :cli {:dependencies [[org.clojure/tools.cli "0.3.5"]
-                                  [io.aviso/pretty "0.1.34"]]
+                                  [io.aviso/pretty "0.1.34"]
+                                  [mount "0.1.11"]]
 
                    :main todos.delivery.cli.core}})

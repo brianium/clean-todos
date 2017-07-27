@@ -41,3 +41,13 @@
   :args (s/cat :type ::type
                :payload (s/? ::payload))
   :ret  ::action)
+
+
+(defn error?
+  [action]
+  (::error? action))
+
+
+(s/fdef error?
+  :args (s/cat :action ::action)
+  :ret  boolean?)

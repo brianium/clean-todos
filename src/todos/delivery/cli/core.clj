@@ -1,15 +1,21 @@
 (ns todos.delivery.cli.core
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [io.aviso.ansi :refer [yellow white red-bg]])
+            [io.aviso.ansi :as ansi]
+            [mount.core :as mount]
+            [todos.delivery.cli.create :as create])
   (:gen-class))
 
 
 (defn usage
   "Returns a usage summary for todos cli"
   [options-summary]
-  (->> [(yellow "Usage:")
+  (->> [(ansi/yellow "Usage:")
         "  todos command [options]"
+        ""
+        (ansi/yellow "Available Commands:")
+        (str "  " (ansi/green "create") ": Create a new todo")
+        (str "  " (ansi/cyan "create todo-name"))
         ""]
        (string/join \newline)))
 
@@ -19,12 +25,18 @@
   [errors]
   (-> "The following errors occurred: "
       (str (string/join errors \newline))
-      white
-      red-bg))
+      ansi/white
+      ansi/red-bg))
 
 
 (def cli-options
   [["-h" "--help"]])
+
+
+;;; The map of commands supported by the todos cli. Maps a string key to a function that
+;;; receives arguments and options in that order. The function should return an exit code
+(def commands
+  {"create" create/execute})
 
 
 (defn validate-args
@@ -32,7 +44,8 @@
   should exit (with a error message, and optional ok status), or a map
   indicating the action the program should take and the options provided."
   [args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
+  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
+        valid-commands (-> commands keys set)]
     (cond
       (:help options)
       {:exit-message (usage summary) :ok? true}
@@ -40,8 +53,8 @@
       errors
       {:exit-message (error-msg errors)}
 
-      (and (>= 1 (count arguments))
-           (#{"create"} (first arguments)))
+      (and (>= (count arguments) 1)
+           (valid-commands (first arguments)))
       {:action (first arguments) :options options :args (rest arguments)}
 
       :else
@@ -50,15 +63,28 @@
 
 (defn exit
   "Exit with the given code and message"
-  [status message]
-  (println message)
-  (System/exit status))
+  ([status message]
+   (println message)
+   (System/exit (if status status 1)))
+  ([status]
+   (exit status "")))
+
+
+(defn- execute
+  "Executes an action with arguments and options then exits"
+  [action args options]
+  (-> commands
+    (get action)
+    (apply [args options])
+    (exit)))
 
 
 (defn -main
   [& args]
+  (mount/start)
   (let [{:keys [action options args exit-message ok?]} (validate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (case action
-        "create" (println "zoooooom")))))
+      (execute action args options)))
+  (.addShutdownHook (Runtime/getRuntime)
+    (Thread. mount/stop)))
