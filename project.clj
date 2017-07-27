@@ -9,5 +9,11 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
                  [org.clojure/core.async "0.3.443"]]
 
-  :profiles {:dev {:source-paths ["src" "test"]
-                   :dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}})
+  :source-paths ["src" "test"]
+  
+  :profiles {:dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}
+
+             :cli {:dependencies [[org.clojure/tools.cli "0.3.5"]
+                                  [io.aviso/pretty "0.1.34"]]
+
+                   :main todos.delivery.cli.core}})
