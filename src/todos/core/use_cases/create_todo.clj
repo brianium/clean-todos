@@ -12,15 +12,15 @@
 (s/def ::dependencies (s/keys :req-un [::in ::out ::storage]))
 
 
-(defn create-action
+(defn result->action
   "Creates an action for the result of creating a new todo"
   [result]
   (if (todo/storage-error? result)
     (action/make-error result)
-    (action/make-action :todo/created result)))
+    (action/make-action :todo/created {:result result})))
 
 
-(s/fdef create-action
+(s/fdef result->action
   :args  (s/cat :result ::todo/storage-result)
   :ret   ::action/action)
 
@@ -32,7 +32,7 @@
       (let [entity (<! in)]
         (->> entity
              (todo/insert storage)
-             (create-action)
+             (result->action)
              (>! out)))
       (recur))
     use-case))

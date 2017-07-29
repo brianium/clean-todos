@@ -9,10 +9,10 @@
 
 (defn action->exit
   "Converts an action type to a map describing exit before"
-  [result]
+  [result name]
   (if (action/error? result)
     {:exit-message (red "There was an error saving the todo")}
-    {:exit-message (green "New todo successfully created") :ok? true}))
+    {:exit-message (green (str "Successfully created new todo: " name)) :ok? true}))
 
 
 (defn execute
@@ -22,6 +22,6 @@
     todo/make-todo
     (uc/put! create-todo))
   (let [result                     (uc/take!! create-todo)
-        {:keys [exit-message ok?]} (action->exit result)]
+        {:keys [exit-message ok?]} (action->exit result name)]
     (println exit-message)
     (if ok? 0 1)))

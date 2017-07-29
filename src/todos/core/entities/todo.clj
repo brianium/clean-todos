@@ -11,8 +11,8 @@
 (s/def ::todo (s/keys :req [::id ::title ::complete? ::created-at ::modified-at]))
 
 (s/def ::storage-error  keyword?)
-(s/def ::storage-result (s/or :todo  ::todo
-                          :error ::storage-error))
+(s/def ::storage-result (s/or :data (s/or :entity ::todo :entities (s/* ::todo))
+                              :error ::storage-error))
 
 
 (defn storage-error?
@@ -70,7 +70,8 @@
 
 (defprotocol TodoStorage
   (-fetch [this id] "Get a todo by id")
-  (-save [this todo] "Save a todo"))
+  (-save [this todo] "Save a todo")
+  (-all [this] "Return a seq of all todos"))
 
 
 (s/def ::storage #(satisfies? TodoStorage %))
@@ -95,6 +96,17 @@
 
 (s/fdef save
   :args (s/cat :storage ::storage :todo ::todo)
+  :ret  ::storage-result)
+
+
+(defn all
+  "Return a seq of all todos"
+  [storage]
+  (-all storage))
+
+
+(s/fdef all
+  :args (s/cat :storage ::storage)
   :ret  ::storage-result)
 
 

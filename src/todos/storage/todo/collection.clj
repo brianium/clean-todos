@@ -15,7 +15,8 @@
   todo/TodoStorage
   (-fetch [_ id] (find-todo @*coll id))
   (-save  [_ todo] (do (swap! *coll conj todo)
-                       todo)))
+                       todo))
+  (-all [_] @*coll))
 
 
 (defn make-storage

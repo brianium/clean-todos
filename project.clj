@@ -7,7 +7,10 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
-                 [org.clojure/core.async "0.3.443"]]
+                 [org.clojure/core.async "0.3.443"]
+                 [org.clojure/java.jdbc "0.7.0"]
+                 [clj-time "0.14.0"]
+                 [honeysql "0.9.0"]]
 
   :source-paths ["src" "test"]
   
@@ -15,6 +18,7 @@
 
              :cli {:dependencies [[org.clojure/tools.cli "0.3.5"]
                                   [io.aviso/pretty "0.1.34"]
-                                  [mount "0.1.11"]]
+                                  [mount "0.1.11"]
+                                  [org.xerial/sqlite-jdbc "3.19.3"]]
 
                    :main todos.delivery.cli.core}})
