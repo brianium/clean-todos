@@ -1,4 +1,4 @@
-(ns todos.core.entities.todo
+(ns todos.core.entity.todo
   (:import (java.util Date
                       UUID)))
 

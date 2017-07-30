@@ -7,7 +7,7 @@
             [todos.core.use-case.create-todo :as ct]
             [todos.core.use-case.create-todo.spec :as spec]
             [todos.core.use-case :as uc]
-            [todos.core.entities.todo :as todo]
+            [todos.core.entity.todo :as todo]
             [todos.core.action :as action]
             [todos.storage.todo.collection :refer [make-storage]]
             [todos.test :refer [test-async]]))

@@ -2,12 +2,10 @@
   "A sqlite powered storage for todos. Some of this would apply
   to other jdbc supported databases, but for now I cry YAGNI"
   (:require [clojure.java.jdbc :as j]
-            [clojure.java.jdbc.spec :as js]
             [clojure.string :as string]
-            [clojure.spec.alpha :as s]
             [honeysql.core :as sql]
             [clj-time.coerce :as c]
-            [todos.core.entities.todo :as todo])
+            [todos.core.entity.todo :as todo])
   (:import (java.util UUID)))
 
 
@@ -107,18 +105,8 @@
    :subname     file})
 
 
-(s/fdef make-db-spec
-  :args (s/cat :file string?)
-  :ret  ::js/db-spec-driver-manager)
-
-
 (defn make-storage
   "Given a db spec - create a new Jdbc backed storage for todos"
   [db]
   (create-table-if-not-exists db)
   (->SqliteStorage db))
-
-
-(s/fdef make-storage
-  :args (s/cat :db ::js/db-spec-driver-manager)
-  :ret  ::todo/storage)

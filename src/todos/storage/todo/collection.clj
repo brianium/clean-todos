@@ -1,6 +1,6 @@
 (ns todos.storage.todo.collection
   "A simple collection backed implementation of todo storage"
-  (:require [todos.core.entities.todo :as todo]))
+  (:require [todos.core.entity.todo :as todo]))
 
 
 (defn- find-todo

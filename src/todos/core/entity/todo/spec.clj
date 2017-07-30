@@ -1,6 +1,6 @@
-(ns todos.core.entities.todo.spec
+(ns todos.core.entity.todo.spec
   (:require [clojure.spec.alpha :as s]
-            [todos.core.entities.todo :as todo]))
+            [todos.core.entity.todo :as todo]))
 
 
 (s/def ::todo/id uuid?)

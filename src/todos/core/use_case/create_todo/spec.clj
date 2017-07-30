@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [todos.core.use-case.create-todo :as create-todo]
             [todos.core.use-case.spec :as use-case]
-            [todos.core.entities.todo.spec :as todo]
+            [todos.core.entity.todo.spec :as todo]
             [todos.core.action.spec :as action]))
 
 

@@ -1,6 +1,6 @@
 (ns todos.core.use-case.create-todo
   (:require [clojure.core.async :refer [go-loop <! >!]]
-            [todos.core.entities.todo :as todo]
+            [todos.core.entity.todo :as todo]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]))
 
