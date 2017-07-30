@@ -2,7 +2,7 @@
   (:require [mount.core :refer [defstate]]
             [clojure.core.async :as async]
             [todos.core.use-case :as uc]
-            [todos.core.use-cases.create-todo :as ct]
+            [todos.core.use-case.create-todo :as ct]
             [todos.delivery.cli.storage :refer [store]]))
 
 
