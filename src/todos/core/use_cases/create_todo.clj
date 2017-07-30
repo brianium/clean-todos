@@ -2,13 +2,14 @@
   (:require [clojure.core.async :refer [go-loop <! >!]]
             [clojure.spec.alpha :as s]
             [todos.core.entities.todo :as todo]
+            [todos.core.entities.spec.todo :as spec]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]))
 
 
 (s/def ::in           ::uc/read-port)
 (s/def ::out          ::uc/write-port)
-(s/def ::storage      ::todo/storage)
+(s/def ::storage      ::spec/storage)
 (s/def ::dependencies (s/keys :req-un [::in ::out ::storage]))
 
 
@@ -21,7 +22,7 @@
 
 
 (s/fdef result->action
-  :args  (s/cat :result ::todo/storage-result)
+  :args  (s/cat :result ::spec/storage-result)
   :ret   ::action/action)
 
 

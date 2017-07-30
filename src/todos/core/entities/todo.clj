@@ -1,29 +1,12 @@
 (ns todos.core.entities.todo
-  (:require [clojure.spec.alpha :as s])
   (:import (java.util Date
                       UUID)))
-
-(s/def ::id uuid?)
-(s/def ::title string?)
-(s/def ::complete? boolean?)
-(s/def ::created-at inst?)
-(s/def ::modified-at inst?)
-(s/def ::todo (s/keys :req [::id ::title ::complete? ::created-at ::modified-at]))
-
-(s/def ::storage-error  keyword?)
-(s/def ::storage-result (s/or :data (s/or :entity ::todo :entities (s/* ::todo))
-                              :error ::storage-error))
 
 
 (defn storage-error?
   "Check if the given storage result was an error"
   [result]
-  (s/valid? ::storage-error result))
-
-
-(s/fdef storage-error?
-  :args (s/cat :result ::storage-result)
-  :ret  boolean?)
+  (keyword? result))
 
 
 (defn make-todo
@@ -38,20 +21,10 @@
    (make-todo (UUID/randomUUID) title)))
 
 
-(s/fdef make-todo
-  :args (s/cat :id ::id :title ::title)
-  :ret ::todo)
-
-
 (defn complete?
   "Check if the given todo is complete"
   [todo]
   (::complete? todo))
-
-
-(s/fdef complete?
-  :args (s/cat :todo ::todo)
-  :ret boolean?)
 
 
 (defn mark-complete
@@ -63,18 +36,10 @@
                  ::modified-at (Date.)})))
 
 
-(s/fdef mark-complete
-  :args (s/cat :todo ::todo)
-  :ret ::todo)
-
-
 (defprotocol TodoStorage
   (-fetch [this id] "Get a todo by id")
   (-save [this todo] "Save a todo")
   (-all [this] "Return a seq of all todos"))
-
-
-(s/def ::storage #(satisfies? TodoStorage %))
 
 
 (defn fetch
@@ -83,20 +48,10 @@
   (-fetch storage id))
 
 
-(s/fdef fetch
-  :args (s/cat :storage ::storage :id ::id)
-  :ret  ::storage-result)
-
-
 (defn save
   "Save a todo to storage"
   [storage todo]
   (-save storage todo))
-
-
-(s/fdef save
-  :args (s/cat :storage ::storage :todo ::todo)
-  :ret  ::storage-result)
 
 
 (defn all
@@ -105,20 +60,10 @@
   (-all storage))
 
 
-(s/fdef all
-  :args (s/cat :storage ::storage)
-  :ret  ::storage-result)
-
-
 (defn insert
   "Inserts a new todo into storage"
   [storage todo]
   (let [result (fetch storage (::id todo))]
-    (if (s/valid? ::todo result)
-      :todo/exists
-      (save storage todo))))
-
-
-(s/fdef insert
-  :args (s/cat :storage ::storage :todo ::todo)
-  :ret  ::storage-result)
+    (if (storage-error? result)
+      (save storage todo)
+      :todo/exists)))

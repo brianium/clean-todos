@@ -4,6 +4,7 @@
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
             [todos.core.entities.todo :as todo]
+            [todos.core.entities.spec.todo]
             [todos.storage.todo.collection :refer [make-storage]]))
 
 
@@ -41,8 +42,8 @@
 
 
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.entities.todo)
-                          (st/check {:gen gen-overrides}))]
+  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.entities.spec.todo)
+                        (st/check {:gen gen-overrides}))]
     (testing (-> test-output :sym name)
       (is
         (true? (-> test-output :clojure.spec.test.check/ret :result))
