@@ -6,8 +6,7 @@
 
 
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.entity)
-                          st/check)]
+  (doseq [test-output (st/check (st/enumerate-namespace 'todos.core.entity))]
     (testing (-> test-output :sym name)
       (is
         (true? (-> test-output :clojure.spec.test.check/ret :result))

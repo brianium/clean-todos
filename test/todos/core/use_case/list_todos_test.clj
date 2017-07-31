@@ -17,7 +17,7 @@
   (let [in           (chan)
         out          (chan)
         active       (todo/make-todo "Active")
-        complete     (-> (todo/make-todo "Complete") todo/mark-complete)
+        complete     (todo/mark-complete (todo/make-todo "Complete"))
         storage      (make-storage #{complete active})
         dependencies (deps/create-deps in out storage)]
     (testing "filtering complete todos"
@@ -27,7 +27,7 @@
           (go (uc/take! list-todos
                 (fn [{{:keys [result]} ::action/payload}]
                   (is (= 1 (count result)))
-                  (is (= "Complete" (-> (first result) ::todo/title)))))))))
+                  (is (= "Complete" (::todo/title (first result))))))))))
     (testing "filtering active todos"
       (let [list-todos (lt/list-todos dependencies)]
         (uc/put! list-todos :active)
@@ -35,7 +35,7 @@
           (go (uc/take! list-todos
                 (fn [{{:keys [result]} ::action/payload}]
                   (is (= 1 (count result)))
-                  (is (= "Active" (-> (first result) ::todo/title)))))))))
+                  (is (= "Active" (::todo/title (first result))))))))))
     (testing "listing all todos"
       (let [list-todos (lt/list-todos dependencies)]
         (uc/put! list-todos :all)
@@ -47,7 +47,8 @@
 
 
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.use-case.list-todos)
-                          (st/check {:gen deps/gen-overrides}))]
+  (doseq [test-output (st/check
+                        (st/enumerate-namespace 'todos.core.use-case.list-todos)
+                        {:gen deps/gen-overrides})]
     (testing (-> test-output :sym name)
       (is (true? (-> test-output :clojure.spec.test.check/ret :result))))))

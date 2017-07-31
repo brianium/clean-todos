@@ -45,10 +45,10 @@
 (deftest test-result->action
   (testing "storage result is an error"
     (let [action (use-case/result->action :my/type :error!!)]
-      (is (= true (::action/error? action)))))
+      (is (true? (::action/error? action)))))
   (testing "storage result is not an error"
     (let [action (use-case/result->action :my/type {:id "so-unique"})]
-      (is (= false (::action/error? action))))))
+      (is (false? (::action/error? action))))))
 
 
 (defn chan-gen [] (s/gen #{(chan)}))

@@ -37,17 +37,17 @@
 
 
 (deftest test-filter-todos
-  (let [complete (-> (todo/make-todo "Complete") todo/mark-complete)
+  (let [complete (todo/mark-complete (todo/make-todo "Complete"))
         active   (todo/make-todo "Active")
         todos    [complete active]]
     (testing "filtering active todos"
       (let [active (todo/filter-todos :active todos)]
         (is (= 1 (count active)))
-        (is (= "Active" (-> (first active) ::todo/title)))))
+        (is (= "Active" (::todo/title (first active))))))
     (testing "filtering complete todos"
       (let [complete (todo/filter-todos :completed todos)]
         (is (= 1 (count complete)))
-        (is (= "Complete" (-> (first complete) ::todo/title)))))
+        (is (= "Complete" (::todo/title (first complete))))))
     (testing "defaults to all todos"
       (let [all (todo/filter-todos :unrecognized-status todos)]
         (is (= 2 (count all)))))))
@@ -59,8 +59,9 @@
 
 
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.entity.todo)
-                        (st/check {:gen gen-overrides}))]
+  (doseq [test-output (st/check
+                        (st/enumerate-namespace 'todos.core.entity.todo)
+                        {:gen gen-overrides})]
     (testing (-> test-output :sym name)
       (is
         (true? (-> test-output :clojure.spec.test.check/ret :result))

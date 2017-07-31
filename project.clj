@@ -16,7 +16,8 @@
   
   :profiles {:dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]
                    :plugins [[venantius/ultra "0.5.1"]
-                             [com.jakemccrary/lein-test-refresh "0.20.0"]]
+                             [com.jakemccrary/lein-test-refresh "0.20.0"]
+                             [lein-kibit "0.1.6-beta2"]]
                    :test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]}}
 
              :cli {:dependencies [[org.clojure/tools.cli "0.3.5"]

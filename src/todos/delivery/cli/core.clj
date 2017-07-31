@@ -10,14 +10,15 @@
 (defn usage
   "Returns a usage summary for todos cli"
   [options-summary]
-  (->> [(ansi/yellow "Usage:")
-        "  todos command [options]"
-        ""
-        (ansi/yellow "Available Commands:")
-        (str "  " (ansi/green "create") ": Create a new todo")
-        (str "  " (ansi/cyan "create todo-name"))
-        ""]
-       (string/join \newline)))
+  (string/join
+    \newline
+    [(ansi/yellow "Usage:")
+     "  todos command [options]"
+     ""
+     (ansi/yellow "Available Commands:")
+     (str "  " (ansi/green "create") ": Create a new todo")
+     (str "  " (ansi/cyan "create todo-name"))
+     ""]))
 
 
 (defn error-msg
@@ -65,7 +66,7 @@
   "Exit with the given code and message"
   ([status message]
    (println message)
-   (System/exit (if status status 1)))
+   (System/exit (or status 1)))
   ([status]
    (exit status "")))
 

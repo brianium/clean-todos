@@ -38,7 +38,8 @@
 
 
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.use-case.create-todo)
-                          (st/check {:gen deps/gen-overrides}))]
+  (doseq [test-output (st/check
+                        (st/enumerate-namespace 'todos.core.use-case.create-todo)
+                        {:gen deps/gen-overrides})]
     (testing (-> test-output :sym name)
       (is (true? (-> test-output :clojure.spec.test.check/ret :result))))))

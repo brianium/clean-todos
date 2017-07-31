@@ -9,7 +9,7 @@
   [todos id]
   (let [entity (first
                  (filter #(.equals id (::entity/id %)) todos))]
-    (if entity entity :not-found)))
+    (or entity :not-found)))
 
 
 (defrecord CollectionStorage [*coll]
