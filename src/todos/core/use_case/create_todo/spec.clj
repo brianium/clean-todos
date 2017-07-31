@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [todos.core.use-case.create-todo :as create-todo]
             [todos.core.use-case.spec :as use-case]
+            [todos.core.entity.spec :as entity]
             [todos.core.entity.todo.spec :as todo]
             [todos.core.action.spec :as action]))
 
@@ -13,7 +14,7 @@
 
 
 (s/fdef create-todo/result->action
-  :args  (s/cat :result ::todo/storage-result)
+  :args  (s/cat :result ::entity/storage-result)
   :ret   ::action/action)
 
 

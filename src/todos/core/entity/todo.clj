@@ -1,21 +1,16 @@
 (ns todos.core.entity.todo
+  (:require [todos.core.entity :as entity])
   (:import (java.util Date
                       UUID)))
-
-
-(defn storage-error?
-  "Check if the given storage result was an error"
-  [result]
-  (keyword? result))
 
 
 (defn make-todo
   "Create a new incomplete todo"
   ([id title]
-   {::id id
-    ::title title
-    ::complete? false
-    ::created-at (Date.)
+   {::entity/id   id
+    ::title       title
+    ::complete?   false
+    ::created-at  (Date.)
     ::modified-at (Date.)})
   ([title]
    (make-todo (UUID/randomUUID) title)))
@@ -63,7 +58,7 @@
 (defn insert
   "Inserts a new todo into storage"
   [storage todo]
-  (let [result (fetch storage (::id todo))]
-    (if (storage-error? result)
+  (let [result (fetch storage (::entity/id todo))]
+    (if (entity/storage-error? result)
       (save storage todo)
       :todo/exists)))

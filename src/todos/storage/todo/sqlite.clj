@@ -5,6 +5,7 @@
             [clojure.string :as string]
             [honeysql.core :as sql]
             [clj-time.coerce :as c]
+            [todos.core.entity :as entity]
             [todos.core.entity.todo :as todo])
   (:import (java.util UUID)))
 
@@ -23,7 +24,7 @@
 (defn- row->todo
   [result]
   (if result
-    {::todo/id          (UUID/fromString (:id result))
+    {::entity/id        (UUID/fromString (:id result))
      ::todo/title       (:title result)
      ::todo/complete?   (if (= (:complete result) 1) true false)
      ::todo/created-at  (sql->date (:created_at result))
@@ -33,7 +34,7 @@
 
 (defn- todo->row
   [todo]
-  {:id          (::todo/id todo)
+  {:id          (::entity/id todo)
    :title       (::todo/title todo)
    :complete    (if (::todo/complete? todo) 1 0)
    :created_at  (date->sql (::todo/created-at todo))

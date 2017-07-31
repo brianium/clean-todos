@@ -1,5 +1,6 @@
 (ns todos.core.use-case.create-todo
   (:require [clojure.core.async :refer [go-loop <! >!]]
+            [todos.core.entity :as entity]
             [todos.core.entity.todo :as todo]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]))
@@ -8,7 +9,7 @@
 (defn result->action
   "Creates an action for the result of creating a new todo"
   [result]
-  (if (todo/storage-error? result)
+  (if (entity/storage-error? result)
     (action/make-error result)
     (action/make-action :todo/created {:result result})))
 

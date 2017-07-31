@@ -1,4 +1,4 @@
-(ns todos.core.entities.todo-test
+(ns todos.core.entity.todo-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as st]

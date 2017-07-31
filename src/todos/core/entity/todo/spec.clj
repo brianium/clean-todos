@@ -1,27 +1,21 @@
 (ns todos.core.entity.todo.spec
   (:require [clojure.spec.alpha :as s]
+            [todos.core.entity :as entity]
+            [todos.core.entity.spec :as es]
             [todos.core.entity.todo :as todo]))
 
 
-(s/def ::todo/id uuid?)
 (s/def ::todo/title string?)
 (s/def ::todo/complete? boolean?)
 (s/def ::todo/created-at inst?)
 (s/def ::todo/modified-at inst?)
-(s/def ::todo (s/keys :req [::todo/id ::todo/title ::todo/complete? ::todo/created-at ::todo/modified-at]))
-(s/def ::storage-error  keyword?)
-(s/def ::storage-result (s/or :data (s/or :entity ::todo :entities (s/* ::todo))
-                              :error ::storage-error))
+(s/def ::todo (s/merge ::es/entity
+                       (s/keys :req [::todo/title ::todo/complete? ::todo/created-at ::todo/modified-at])))
 (s/def ::storage #(satisfies? todo/TodoStorage %))
 
 
-(s/fdef todo/storage-error?
-  :args (s/cat :result ::storage-result)
-  :ret  boolean?)
-
-
 (s/fdef todo/make-todo
-  :args (s/cat :id ::todo/id :title ::todo/title)
+  :args (s/cat :id ::entity/id :title ::todo/title)
   :ret ::todo)
 
 
@@ -36,19 +30,19 @@
 
 
 (s/fdef todo/fetch
-  :args (s/cat :storage ::storage :id ::todo/id)
-  :ret  ::storage-result)
+  :args (s/cat :storage ::storage :id ::entity/id)
+  :ret  ::es/storage-result)
 
 
 (s/fdef save
   :args (s/cat :storage ::storage :todo ::todo)
-  :ret  ::storage-result)
+  :ret  ::es/storage-result)
 
 
 (s/fdef all
   :args (s/cat :storage ::storage)
-  :ret  ::storage-result)
+  :ret  ::es/storage-result)
 
 (s/fdef insert
   :args (s/cat :storage ::storage :todo ::todo)
-  :ret  ::storage-result)
+  :ret  ::es/storage-result)
