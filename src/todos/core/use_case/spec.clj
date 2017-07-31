@@ -1,7 +1,9 @@
 (ns todos.core.use-case.spec
   (:require [clojure.spec.alpha :as s]
             [clojure.core.async.impl.protocols :refer [ReadPort WritePort]]
-            [todos.core.use-case :as use-case]))
+            [todos.core.use-case :as use-case]
+            [todos.core.action.spec :as action]
+            [todos.core.entity.spec :as entity]))
 
 
 (defn read-port?
@@ -51,3 +53,8 @@
 (s/fdef use-case/output
   :args (s/cat :use-case ::use-case)
   :ret  ::read-port)
+
+
+(s/fdef use-case/result->action
+  :args  (s/cat :type keyword? :result ::entity/storage-result)
+  :ret   ::action/action)

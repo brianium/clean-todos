@@ -6,14 +6,6 @@
             [todos.core.action :as action]))
 
 
-(defn result->action
-  "Creates an action for the result of creating a new todo"
-  [result]
-  (if (entity/storage-error? result)
-    (action/make-error result)
-    (action/make-action :todo/created {:result result})))
-
-
 (defn create-todo
   [{:keys [in out storage] :as dependencies}]
   (let [use-case (uc/make-use-case in out)]
@@ -21,7 +13,7 @@
       (let [entity (<! in)]
         (->> entity
              (todo/insert storage)
-             (result->action)
+             (uc/result->action :todo/create)
              (>! out)))
       (recur))
     use-case))

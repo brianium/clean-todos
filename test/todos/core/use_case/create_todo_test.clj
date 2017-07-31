@@ -32,7 +32,7 @@
       (uc/put! use-case entity)
       (test-async
         (go (uc/take! use-case (fn [action]
-                                 (is (= :todo/created (::action/type action)))))))))
+                                 (is (= :todo/create (::action/type action)))))))))
   (testing "creating existing todo"
     (let [in       (chan)
           out      (chan)
@@ -42,7 +42,7 @@
       (uc/put! use-case entity)
       (test-async
         (go (uc/take! use-case (fn [action]
-                                 (is (= :todo/exists (::action/type action)))
+                                 (is (= :todo/exists (-> action ::action/payload :result)))
                                  (is (true? (::action/error? action))))))))))
 
 

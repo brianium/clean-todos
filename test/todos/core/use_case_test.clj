@@ -6,6 +6,7 @@
             [clojure.core.async :refer [chan <!! go <! >!]]
             [todos.core.use-case :as use-case]
             [todos.core.use-case.spec :as spec]
+            [todos.core.action :as action]
             [todos.test :refer [test-async]]))
 
 
@@ -39,6 +40,15 @@
         uc  (use-case/make-use-case in out)]
     (go (>! out "hello"))
     (is (= "hello" (use-case/take!! uc)))))
+
+
+(deftest test-result->action
+  (testing "storage result is an error"
+    (let [action (use-case/result->action :my/type :error!!)]
+      (is (= true (::action/error? action)))))
+  (testing "storage result is not an error"
+    (let [action (use-case/result->action :my/type {:id "so-unique"})]
+      (is (= false (::action/error? action))))))
 
 
 (defn chan-gen [] (s/gen #{(chan)}))

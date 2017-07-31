@@ -1,5 +1,7 @@
 (ns todos.core.use-case
-  (:require [clojure.core.async :as async :refer [go <! <!!]]))
+  (:require [clojure.core.async :as async :refer [go <! <!!]]
+            [todos.core.entity :as entity]
+            [todos.core.action :as action]))
 
 
 (defprotocol UseCase
@@ -58,3 +60,12 @@
   "Get the output channel of the given use case"
   [use-case]
   (-output use-case))
+
+
+(defn result->action
+  "Creates an action for the result of creating a new todo"
+  [type result]
+  (let [payload { :result result }]
+    (if (entity/storage-error? result)
+      (action/make-error type payload)
+      (action/make-action type payload))))

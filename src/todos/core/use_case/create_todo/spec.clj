@@ -13,11 +13,6 @@
 (s/def ::dependencies (s/keys :req-un [::in ::out ::storage]))
 
 
-(s/fdef create-todo/result->action
-  :args  (s/cat :result ::entity/storage-result)
-  :ret   ::action/action)
-
-
 (s/fdef create-todo/create-todo
   :args (s/cat :dependencies ::dependencies)
   :ret  ::use-case/use-case)
