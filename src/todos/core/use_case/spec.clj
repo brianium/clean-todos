@@ -3,7 +3,8 @@
             [clojure.core.async.impl.protocols :refer [ReadPort WritePort]]
             [todos.core.use-case :as use-case]
             [todos.core.action.spec :as action]
-            [todos.core.entity.spec :as entity]))
+            [todos.core.entity.spec :as entity]
+            [todos.core.entity.todo.spec :as todo]))
 
 
 (defn read-port?
@@ -23,6 +24,13 @@
 (s/def ::use-case use-case/use-case?)
 (s/def ::channel-value (complement nil?))
 (s/def ::take-handler  fn?)
+
+;; base dependency spec for a use case - in and out channels, and a storage
+
+(s/def ::in           ::read-port)
+(s/def ::out          ::write-port)
+(s/def ::storage      ::todo/storage)
+(s/def ::dependencies (s/keys :req-un [::in ::out ::storage]))
 
 
 (s/fdef use-case/make-use-case

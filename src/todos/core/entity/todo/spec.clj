@@ -46,3 +46,8 @@
 (s/fdef insert
   :args (s/cat :storage ::storage :todo ::todo)
   :ret  ::es/storage-result)
+
+
+(s/fdef filter-todos
+  :args (s/cat :status keyword? :todos (s/* ::todo))
+  :ret  (s/* ::todo))

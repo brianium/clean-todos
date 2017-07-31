@@ -3,30 +3,21 @@
             [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
-            [clojure.core.async :refer [chan >! <! go]]
+            [clojure.core.async :refer [chan go]]
             [todos.core.use-case.create-todo :as ct]
-            [todos.core.use-case.create-todo.spec :as spec]
             [todos.core.use-case :as uc]
             [todos.core.entity.todo :as todo]
             [todos.core.action :as action]
             [todos.storage.todo.collection :refer [make-storage]]
-            [todos.test :refer [test-async]]))
-
-
-(defn- create-deps
-  ([in out storage]
-   {:in      in
-    :out     out
-    :storage storage})
-  ([in out]
-   (create-deps in out (make-storage))))
+            [todos.test :refer [test-async]]
+            [todos.core.use-case.dependencies :as deps]))
 
 
 (deftest test-create-todo
   (testing "create new todo"
     (let [in       (chan)
           out      (chan)
-          deps     (create-deps in out)
+          deps     (deps/create-deps in out)
           use-case (ct/create-todo deps)
           entity   (todo/make-todo "Not done")]
       (uc/put! use-case entity)
@@ -37,7 +28,7 @@
     (let [in       (chan)
           out      (chan)
           entity   (todo/make-todo "New todo")
-          deps     (create-deps in out (make-storage #{entity}))
+          deps     (deps/create-deps in out (make-storage #{entity}))
           use-case (ct/create-todo deps)]
       (uc/put! use-case entity)
       (test-async
@@ -46,12 +37,8 @@
                                  (is (true? (::action/error? action))))))))))
 
 
-(defn deps-gen [] (s/gen #{(create-deps (chan) (chan))}))
-(def gen-overrides {::spec/dependencies deps-gen})
-
-
 (deftest generated-tests
   (doseq [test-output (-> (st/enumerate-namespace 'todos.core.use-case.create-todo)
-                          (st/check {:gen gen-overrides}))]
+                          (st/check {:gen deps/gen-overrides}))]
     (testing (-> test-output :sym name)
       (is (true? (-> test-output :clojure.spec.test.check/ret :result))))))

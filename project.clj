@@ -14,7 +14,10 @@
 
   :source-paths ["src" "test"]
   
-  :profiles {:dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}
+  :profiles {:dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]
+                   :plugins [[venantius/ultra "0.5.1"]
+                             [com.jakemccrary/lein-test-refresh "0.20.0"]]
+                   :test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]}}
 
              :cli {:dependencies [[org.clojure/tools.cli "0.3.5"]
                                   [io.aviso/pretty "0.1.34"]

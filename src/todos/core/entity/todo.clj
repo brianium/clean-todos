@@ -7,7 +7,8 @@
 (defn make-todo
   "Create a new incomplete todo"
   ([id title]
-   {::entity/id   id
+   {::entity/id
+    id
     ::title       title
     ::complete?   false
     ::created-at  (Date.)
@@ -62,3 +63,15 @@
     (if (entity/storage-error? result)
       (save storage todo)
       :todo/exists)))
+
+
+(def filters
+  {:completed (filter complete?)
+   :active    (filter (complement complete?))})
+
+
+(defn filter-todos
+  [status todos]
+  (if-let [xform (get filters status)]
+    (transduce xform conj todos)
+    todos))

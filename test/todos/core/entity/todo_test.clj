@@ -36,6 +36,23 @@
         (is (= new-todo (todo/insert storage new-todo)))))))
 
 
+(deftest test-filter-todos
+  (let [complete (-> (todo/make-todo "Complete") todo/mark-complete)
+        active   (todo/make-todo "Active")
+        todos    [complete active]]
+    (testing "filtering active todos"
+      (let [active (todo/filter-todos :active todos)]
+        (is (= 1 (count active)))
+        (is (= "Active" (-> (first active) ::todo/title)))))
+    (testing "filtering complete todos"
+      (let [complete (todo/filter-todos :completed todos)]
+        (is (= 1 (count complete)))
+        (is (= "Complete" (-> (first complete) ::todo/title)))))
+    (testing "defaults to all todos"
+      (let [all (todo/filter-todos :unrecognized-status todos)]
+        (is (= 2 (count all)))))))
+
+
 (def test-storage (make-storage))
 (defn storage-gen [] (s/gen #{test-storage}))
 (def gen-overrides {::spec/storage storage-gen})
