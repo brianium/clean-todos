@@ -3,12 +3,25 @@
             [clojure.core.async :as async]
             [todos.core.use-case :as uc]
             [todos.core.use-case.create-todo :as ct]
+            [todos.core.use-case.list-todos :as lt]
             [todos.delivery.cli.storage :refer [store]]))
+
+
+(defn close!
+  "Cleans up a use case.
+  TODO - consider making this part of the use case api"
+  [use-case]
+  (doseq [chan [(uc/input use-case) (uc/output use-case)]]
+    (async/close! chan)))
 
 
 (defstate create-todo :start (ct/create-todo {:in      (async/chan)
                                               :out     (async/chan)
                                               :storage store})
-                      :stop (fn []
-                              (doseq [chan [(uc/input create-todo) (uc/output create-todo)]]
-                                (async/close! chan))))
+                      :stop (close! create-todo))
+
+
+(defstate list-todos :start (lt/list-todos {:in      (async/chan)
+                                            :out     (async/chan)
+                                            :storage store})
+                     :stop (close! list-todos))

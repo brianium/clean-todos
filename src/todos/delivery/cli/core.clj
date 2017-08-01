@@ -3,7 +3,8 @@
             [clojure.tools.cli :refer [parse-opts]]
             [io.aviso.ansi :as ansi]
             [mount.core :as mount]
-            [todos.delivery.cli.create :as create])
+            [todos.delivery.cli.create :as create]
+            [todos.delivery.cli.list :as list-todos])
   (:gen-class))
 
 
@@ -14,6 +15,9 @@
     \newline
     [(ansi/yellow "Usage:")
      "  todos command [options]"
+     ""
+     (ansi/yellow "Options:")
+     options-summary
      ""
      (ansi/yellow "Available Commands:")
      (str "  " (ansi/green "create") ": Create a new todo")
@@ -31,13 +35,17 @@
 
 
 (def cli-options
-  [["-h" "--help"]])
+  [["-s" "--status STATUS" "Todo status to filter on"
+    :default :all
+    :parse-fn #(or (keyword (#{"completed" "active"} %)) :all)]
+   ["-h" "--help"]])
 
 
 ;;; The map of commands supported by the todos cli. Maps a string key to a function that
 ;;; receives arguments and options in that order. The function should return an exit code
 (def commands
-  {"create" create/execute})
+  {"create" create/execute
+   "list"   list-todos/execute})
 
 
 (defn validate-args

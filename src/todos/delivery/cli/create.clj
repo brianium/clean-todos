@@ -7,7 +7,7 @@
             [todos.delivery.cli.use-cases :refer [create-todo]]))
 
 
-(defn action->exit
+(defn- action->exit
   "Converts an action type to a map describing exit before"
   [result name]
   (if (action/error? result)
