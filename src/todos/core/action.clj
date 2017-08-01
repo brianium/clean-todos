@@ -1,12 +1,4 @@
-(ns todos.core.action
-  (:require [clojure.spec.alpha :as s]))
-
-
-(s/def ::type    keyword?)
-(s/def ::error?  boolean?)
-(s/def ::payload map?)
-(s/def ::action  (s/keys :req [::type ::error?]
-                         :opt [::payload]))
+(ns todos.core.action)
 
 
 (defn make-action
@@ -20,12 +12,6 @@
     ::error? false}))
 
 
-(s/fdef make-action
-  :args (s/cat :type   ::type
-               :payload (s/? ::payload))
-  :ret  ::action)
-
-
 (defn make-error
   "Creates a new error action"
   ([type payload]
@@ -37,7 +23,6 @@
     ::error?  true}))
 
 
-(s/fdef make-error
-  :args (s/cat :type ::type
-               :payload (s/? ::payload))
-  :ret  ::action)
+(defn error?
+  [action]
+  (::error? action))

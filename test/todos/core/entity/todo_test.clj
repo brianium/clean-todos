@@ -1,9 +1,10 @@
-(ns todos.core.entities.todo-test
+(ns todos.core.entity.todo-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
-            [todos.core.entities.todo :as todo]
+            [todos.core.entity.todo :as todo]
+            [todos.core.entity.todo.spec :as spec]
             [todos.storage.todo.collection :refer [make-storage]]))
 
 
@@ -35,14 +36,32 @@
         (is (= new-todo (todo/insert storage new-todo)))))))
 
 
+(deftest test-filter-todos
+  (let [complete (todo/mark-complete (todo/make-todo "Complete"))
+        active   (todo/make-todo "Active")
+        todos    [complete active]]
+    (testing "filtering active todos"
+      (let [active (todo/filter-todos :active todos)]
+        (is (= 1 (count active)))
+        (is (= "Active" (::todo/title (first active))))))
+    (testing "filtering complete todos"
+      (let [complete (todo/filter-todos :completed todos)]
+        (is (= 1 (count complete)))
+        (is (= "Complete" (::todo/title (first complete))))))
+    (testing "defaults to all todos"
+      (let [all (todo/filter-todos :unrecognized-status todos)]
+        (is (= 2 (count all)))))))
+
+
 (def test-storage (make-storage))
 (defn storage-gen [] (s/gen #{test-storage}))
-(def gen-overrides {::todo/storage storage-gen})
+(def gen-overrides {::spec/storage storage-gen})
 
 
 (deftest generated-tests
-  (doseq [test-output (-> (st/enumerate-namespace 'todos.core.entities.todo)
-                          (st/check {:gen gen-overrides}))]
+  (doseq [test-output (st/check
+                        (st/enumerate-namespace 'todos.core.entity.todo)
+                        {:gen gen-overrides})]
     (testing (-> test-output :sym name)
       (is
         (true? (-> test-output :clojure.spec.test.check/ret :result))
