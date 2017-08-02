@@ -23,18 +23,7 @@
       (uc/put! use-case entity)
       (test-async
         (go (uc/take! use-case (fn [action]
-                                 (is (= :todo/create (::action/type action)))))))))
-  (testing "creating existing todo"
-    (let [in       (chan)
-          out      (chan)
-          entity   (todo/make-todo "New todo")
-          deps     (deps/create-deps in out (make-storage #{entity}))
-          use-case (ct/create-todo deps)]
-      (uc/put! use-case entity)
-      (test-async
-        (go (uc/take! use-case (fn [action]
-                                 (is (= :todo/exists (-> action ::action/payload :result)))
-                                 (is (true? (::action/error? action))))))))))
+                                 (is (= :todo/create (::action/type action))))))))))
 
 
 (deftest generated-tests

@@ -48,6 +48,15 @@
     (catch Exception e :not-inserted)))
 
 
+(defn- update-todo
+  [db todo]
+  (let [id   (::entity/id todo)
+        data (dissoc (todo->row todo) :id)]
+    (try
+      (j/update! db :todos data ["id = ?" id])
+      (catch Exception e :not-updated))))
+
+
 (defn- fetch
   [db id]
   (->> {:select [:*]
@@ -57,6 +66,15 @@
     (j/query db)
     first
     row->todo))
+
+
+(defn- save
+  [db todo]
+  (let [current (fetch db (::entity/id todo))
+        new?    (= :not-found current)]
+    (if new?
+      (insert-todo db todo)
+      (update-todo db (merge current todo)))))
 
 
 (defn- all
@@ -71,7 +89,7 @@
 (defrecord SqliteStorage [db]
   todo/TodoStorage
   (-fetch [_ id] (fetch db id))
-  (-save [_ todo] (insert-todo db todo))
+  (-save [_ todo] (save db todo))
   (-all [_] (all db)))
 
 

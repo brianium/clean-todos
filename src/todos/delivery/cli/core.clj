@@ -8,6 +8,15 @@
   (:gen-class))
 
 
+(defn command-usage
+  "Returns a string representing individual command usage"
+  [name description signature]
+  (string/join
+    \newline
+    [(str "  " (ansi/green name) ": " description)
+     (str "  " (ansi/cyan (str name " " signature)))]))
+
+
 (defn usage
   "Returns a usage summary for todos cli"
   [options-summary]
@@ -20,8 +29,11 @@
      options-summary
      ""
      (ansi/yellow "Available Commands:")
-     (str "  " (ansi/green "create") ": Create a new todo")
-     (str "  " (ansi/cyan "create todo-name"))
+     (command-usage "create" "Create a new todo" "todo-name")
+     ""
+     (command-usage "list" "List todos" "[--status STATUS]")
+     ""
+     (command-usage "toggle" "Toggle todo status" "todo-id")
      ""]))
 
 

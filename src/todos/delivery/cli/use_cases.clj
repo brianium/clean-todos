@@ -4,6 +4,7 @@
             [todos.core.use-case :as uc]
             [todos.core.use-case.create-todo :as ct]
             [todos.core.use-case.list-todos :as lt]
+            [todos.core.use-case.update-todo :as ut]
             [todos.delivery.cli.storage :refer [store]]))
 
 
@@ -15,13 +16,21 @@
     (async/close! chan)))
 
 
-(defstate create-todo :start (ct/create-todo {:in      (async/chan)
-                                              :out     (async/chan)
-                                              :storage store})
+(defn create-deps
+  "Creates a fresh set of dependencies for a use case"
+  []
+  {:in      (async/chan)
+   :out     (async/chan)
+   :storage store})
+
+
+(defstate create-todo :start (ct/create-todo (create-deps))
                       :stop (close! create-todo))
 
 
-(defstate list-todos :start (lt/list-todos {:in      (async/chan)
-                                            :out     (async/chan)
-                                            :storage store})
+(defstate list-todos :start (lt/list-todos (create-deps))
                      :stop (close! list-todos))
+
+
+(defstate update-todo :start (ut/update-todo (create-deps))
+                      :stop (close! update-todo))

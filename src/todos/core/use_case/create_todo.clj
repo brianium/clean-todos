@@ -12,7 +12,7 @@
     (go-loop []
       (let [entity (<! in)]
         (->> entity
-             (todo/insert storage)
+             (todo/save storage)
              (uc/result->action :todo/create)
              (>! out)))
       (recur))
