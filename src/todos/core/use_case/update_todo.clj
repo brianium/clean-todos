@@ -9,8 +9,8 @@
   [{:keys [in out storage] :as dependencies}]
   (let [use-case (uc/make-use-case in out)]
     (go-loop []
-      (let [{:keys [id todo]} (<! in)
-            current           (todo/fetch storage id)]
+      (let [[id todo] (<! in)
+            current   (todo/fetch storage id)]
         (if (entity/storage-error? current)
           (>! out (uc/result->action :todo/update current))
           (->> current

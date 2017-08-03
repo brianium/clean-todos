@@ -4,9 +4,11 @@
             [todos.core.entity.todo :as todo]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]
-            [todos.delivery.cli.use-cases :refer [update-todo]]))
+            [todos.delivery.cli.use-cases :refer [update-todo]]
+            [todos.delivery.cli.storage :refer [store]]))
 
 
 (defn execute
   "Exercises the update todo use case and prints results to stdout"
-  [[id] _])
+  [[id] _]
+  (let [current (todo/fetch )]))

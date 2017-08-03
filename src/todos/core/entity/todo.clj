@@ -1,7 +1,6 @@
 (ns todos.core.entity.todo
   (:require [todos.core.entity :as entity])
-  (:import (java.util Date
-                      UUID)))
+  (:import (java.util Date)))
 
 
 (defn make-todo
@@ -14,7 +13,7 @@
     ::created-at  (Date.)
     ::modified-at (Date.)})
   ([title]
-   (make-todo (UUID/randomUUID) title)))
+   (make-todo (entity/make-uuid) title)))
 
 
 (defn complete?
