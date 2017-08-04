@@ -13,9 +13,9 @@
             current   (todo/fetch storage id)]
         (if (entity/storage-error? current)
           (>! out (uc/result->action :todo/update current))
-          (->> current
+          (->> {::entity/id id}
                (merge todo)
-               (merge {::entity/id id})
+               (merge current)
                (todo/save storage)
                (uc/result->action :todo/update)
                (>! out))))

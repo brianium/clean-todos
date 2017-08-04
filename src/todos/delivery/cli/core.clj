@@ -4,7 +4,8 @@
             [io.aviso.ansi :as ansi]
             [mount.core :as mount]
             [todos.delivery.cli.create :as create]
-            [todos.delivery.cli.list :as list-todos])
+            [todos.delivery.cli.list :as list-todos]
+            [todos.delivery.cli.toggle :as toggle])
   (:gen-class))
 
 
@@ -57,7 +58,8 @@
 ;;; receives arguments and options in that order. The function should return an exit code
 (def commands
   {"create" create/execute
-   "list"   list-todos/execute})
+   "list"   list-todos/execute
+   "toggle" toggle/execute})
 
 
 (defn validate-args

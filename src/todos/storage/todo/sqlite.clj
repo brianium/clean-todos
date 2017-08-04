@@ -53,7 +53,7 @@
   (let [id   (::entity/id todo)
         data (dissoc (todo->row todo) :id)]
     (try
-      (j/update! db :todos data ["id = ?" id])
+      (j/update! db :todos data ["id = ?" id]) todo
       (catch Exception e :not-updated))))
 
 
