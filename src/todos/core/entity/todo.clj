@@ -6,8 +6,7 @@
 (defn make-todo
   "Create a new incomplete todo"
   ([id title]
-   {::entity/id
-    id
+   {::entity/id   id
     ::title       title
     ::complete?   false
     ::created-at  (Date.)
