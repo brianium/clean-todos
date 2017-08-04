@@ -26,14 +26,28 @@
       (is (= completed completed-again)))))
 
 
-(deftest test-insert-todo
-  (let [entity  (todo/make-todo "Incomplete")
-        storage (make-storage #{entity})]
-    (testing "todo already exists"
-      (is (true? (keyword? (todo/insert storage entity)))))
-    (testing "todo is new"
-      (let [new-todo (todo/make-todo "Also not done")]
-        (is (= new-todo (todo/insert storage new-todo)))))))
+(deftest test-mark-active
+  (testing "marking a complete todo"
+    (let [entity    (todo/make-todo "Complete")
+          completed (todo/mark-complete entity)
+          active    (todo/mark-active completed)]
+      (is (false? (::todo/complete? active)))))
+  (testing "marking an active todo"
+    (let [entity (todo/make-todo "Test")
+          active (todo/mark-active entity)]
+      (is (= entity active)))))
+
+
+(deftest test-toggle-status
+  (testing "toggling an incomplete todo"
+    (let [entity  (todo/make-todo "test")
+          toggled (todo/toggle-status entity)]
+      (is (true? (::todo/complete? toggled)))))
+  (testing "toggling a complete todo"
+    (let [entity    (todo/make-todo "test")
+          completed (todo/mark-complete entity)
+          toggled   (todo/toggle-status completed)]
+      (is (false? (::todo/complete? toggled))))))
 
 
 (deftest test-filter-todos

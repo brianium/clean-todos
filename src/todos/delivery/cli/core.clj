@@ -4,8 +4,18 @@
             [io.aviso.ansi :as ansi]
             [mount.core :as mount]
             [todos.delivery.cli.create :as create]
-            [todos.delivery.cli.list :as list-todos])
+            [todos.delivery.cli.list :as list-todos]
+            [todos.delivery.cli.toggle :as toggle])
   (:gen-class))
+
+
+(defn command-usage
+  "Returns a string representing individual command usage"
+  [name description signature]
+  (string/join
+    \newline
+    [(str "  " (ansi/green name) ": " description)
+     (str "  " (ansi/cyan (str name " " signature)))]))
 
 
 (defn usage
@@ -20,8 +30,11 @@
      options-summary
      ""
      (ansi/yellow "Available Commands:")
-     (str "  " (ansi/green "create") ": Create a new todo")
-     (str "  " (ansi/cyan "create todo-name"))
+     (command-usage "create" "Create a new todo" "todo-name")
+     ""
+     (command-usage "list" "List todos" "[--status STATUS]")
+     ""
+     (command-usage "toggle" "Toggle todo status" "todo-id")
      ""]))
 
 
@@ -45,7 +58,8 @@
 ;;; receives arguments and options in that order. The function should return an exit code
 (def commands
   {"create" create/execute
-   "list"   list-todos/execute})
+   "list"   list-todos/execute
+   "toggle" toggle/execute})
 
 
 (defn validate-args

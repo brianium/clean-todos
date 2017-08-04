@@ -29,6 +29,16 @@
   :ret ::todo)
 
 
+(s/fdef todo/mark-active
+  :args (s/cat :todo ::todo)
+  :ret  ::todo)
+
+
+(s/fdef todo/toggle-status
+  :args (s/cat :todo ::todo)
+  :ret  ::todo)
+
+
 (s/fdef todo/fetch
   :args (s/cat :storage ::storage :id ::entity/id)
   :ret  ::es/storage-result)
@@ -41,10 +51,6 @@
 
 (s/fdef all
   :args (s/cat :storage ::storage)
-  :ret  ::es/storage-result)
-
-(s/fdef insert
-  :args (s/cat :storage ::storage :todo ::todo)
   :ret  ::es/storage-result)
 
 
