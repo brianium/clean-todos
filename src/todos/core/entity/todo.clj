@@ -51,7 +51,8 @@
   (-fetch [this id] "Get a todo by id")
   (-save [this todo] "Save a todo")
   (-insert [this todo] "Inserts a new todo")
-  (-all [this] "Return a seq of all todos"))
+  (-all [this] "Return a seq of all todos")
+  (-remove [this id] "Removes a todo from storage"))
 
 
 (defn fetch
@@ -71,6 +72,12 @@
   "Return a seq of all todos"
   [storage]
   (-all storage))
+
+
+(defn remove
+  "Removes a todo from storage by id"
+  [storage id]
+  (-remove storage id))
 
 
 (def filters

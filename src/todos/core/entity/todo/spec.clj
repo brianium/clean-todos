@@ -54,6 +54,11 @@
   :ret  ::es/storage-result)
 
 
+(s/fdef remove
+  :args (s/cat :store ::storage :id ::entity/id)
+  :ret  boolean?)
+
+
 (s/fdef filter-todos
   :args (s/cat :status keyword? :todos (s/* ::todo))
   :ret  (s/* ::todo))
