@@ -5,7 +5,8 @@
             [mount.core :as mount]
             [todos.delivery.cli.create :as create]
             [todos.delivery.cli.list :as list-todos]
-            [todos.delivery.cli.toggle :as toggle])
+            [todos.delivery.cli.toggle :as toggle]
+            [todos.delivery.cli.delete :as delete-todo])
   (:gen-class))
 
 
@@ -35,6 +36,8 @@
      (command-usage "list" "List todos" "[--status STATUS]")
      ""
      (command-usage "toggle" "Toggle todo status" "todo-id")
+     ""
+     (command-usage "delete" "Permanently removes a todo" "todo-id")
      ""]))
 
 
@@ -49,7 +52,7 @@
 
 (def cli-options
   [["-s" "--status STATUS" "Todo status to filter on"
-    :default :all
+    :default "all"
     :parse-fn #(or (keyword (#{"completed" "active"} %)) :all)]
    ["-h" "--help"]])
 
@@ -59,7 +62,8 @@
 (def commands
   {"create" create/execute
    "list"   list-todos/execute
-   "toggle" toggle/execute})
+   "toggle" toggle/execute
+   "delete" delete-todo/execute})
 
 
 (defn validate-args
