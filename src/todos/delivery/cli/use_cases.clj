@@ -5,6 +5,7 @@
             [todos.core.use-case.create-todo :as ct]
             [todos.core.use-case.list-todos :as lt]
             [todos.core.use-case.update-todo :as ut]
+            [todos.core.use-case.delete-todo :as dt]
             [todos.delivery.cli.storage :refer [store]]))
 
 
@@ -34,3 +35,7 @@
 
 (defstate update-todo :start (ut/update-todo (create-deps))
                       :stop (close! update-todo))
+
+
+(defstate delete-todo :start (dt/delete-todo (create-deps))
+                      :stop  (close! delete-todo))

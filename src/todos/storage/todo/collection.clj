@@ -36,11 +36,25 @@
       (update-todo *todos todo current))))
 
 
+(defn- delete
+  "Removes a todo by id from the collection"
+  [*coll id]
+  (let [current (find-todo @*coll id)]
+    (if-not (entity/storage-error? current)
+      (-> @*coll
+        (disj current)
+        (as-> updated (reset! *coll updated))
+        (as-> reset (reset current))
+        nil?)
+      false)))
+
+
 (defrecord CollectionStorage [*coll]
   todo/TodoStorage
   (-fetch [_ id] (find-todo @*coll id))
   (-save  [_ todo] (save *coll todo))
-  (-all [_] @*coll))
+  (-all [_] @*coll)
+  (-delete [_ id] (delete *coll id)))
 
 
 (defn make-storage

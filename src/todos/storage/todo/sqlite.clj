@@ -86,11 +86,22 @@
     (map row->todo)))
 
 
+(defn- delete
+  "Removes a todo from the database by id"
+  [db id]
+  (try
+    (-> (j/delete! db :todos ["id = ?" id])
+        first
+        (= 1))
+    (catch Exception e false)))
+
+
 (defrecord SqliteStorage [db]
   todo/TodoStorage
   (-fetch [_ id] (fetch db id))
   (-save [_ todo] (save db todo))
-  (-all [_] (all db)))
+  (-all [_] (all db))
+  (-delete [_ id] (delete db id)))
 
 
 (def table-spec
