@@ -33,7 +33,7 @@
      (ansi/yellow "Available Commands:")
      (command-usage "create" "Create a new todo" "todo-name")
      ""
-     (command-usage "list" "List todos" "[--status STATUS]")
+     (command-usage "list" "List todos" "--status=STATUS <completed,active,all>")
      ""
      (command-usage "toggle" "Toggle todo status" "todo-id")
      ""

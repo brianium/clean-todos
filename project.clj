@@ -12,9 +12,10 @@
                  [clj-time "0.14.0"]
                  [honeysql "0.9.0"]]
 
-  :source-paths ["src" "test"]
+  :source-paths ["src"]
   
   :profiles {:dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]
+                   :source-paths ["src" "test"]
                    :plugins [[venantius/ultra "0.5.1"]
                              [com.jakemccrary/lein-test-refresh "0.20.0"]
                              [lein-kibit "0.1.6-beta2"]]
@@ -25,4 +26,10 @@
                                   [mount "0.1.11"]
                                   [org.xerial/sqlite-jdbc "3.19.3"]]
 
-                   :main todos.delivery.cli.core}})
+                   :plugins [[lein-binplus "0.6.2"]]
+
+                   :main todos.delivery.cli.core}
+
+             :uberjar {:aot :all}}
+  
+  :bin {:name "todos"})
