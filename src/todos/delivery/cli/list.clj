@@ -19,10 +19,12 @@
 
 (defn- format-todos
   [todos]
-  (reduce
-    format-todo
-    (str (yellow "Todos:") \newline)
-    todos))
+  (if (seq todos)
+    (reduce
+      format-todo
+      (str (yellow "Todos:") \newline)
+      todos)
+    (yellow "Do you even have goals? Create a new todo!")))
 
 
 (defn- action->exit
