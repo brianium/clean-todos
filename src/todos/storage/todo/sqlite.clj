@@ -86,7 +86,7 @@
     (map row->todo)))
 
 
-(defn- remove
+(defn- delete
   "Removes a todo from the database by id"
   [db id]
   (try
@@ -101,7 +101,7 @@
   (-fetch [_ id] (fetch db id))
   (-save [_ todo] (save db todo))
   (-all [_] (all db))
-  (-remove [_ id] (remove db id)))
+  (-delete [_ id] (delete db id)))
 
 
 (def table-spec

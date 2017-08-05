@@ -36,11 +36,11 @@
       (update-todo *todos todo current))))
 
 
-(defn- remove
+(defn- delete
   "Removes a todo by id from the collection"
   [*coll id]
   (let [current (find-todo @*coll id)]
-    (if (not (entity/storage-error? current))
+    (if-not (entity/storage-error? current)
       (-> @*coll
         (disj current)
         (as-> updated (reset! *coll updated))
@@ -54,7 +54,7 @@
   (-fetch [_ id] (find-todo @*coll id))
   (-save  [_ todo] (save *coll todo))
   (-all [_] @*coll)
-  (-remove [_ id] (remove *coll id)))
+  (-delete [_ id] (delete *coll id)))
 
 
 (defn make-storage
