@@ -44,6 +44,34 @@ This delivery is built to a single executble named `todos` using the [lein binpl
 $ lein with-profile +cli bin
 ```
 
+### todos.delivery.api
+
+The api delivery provides a simple restful interface for managing todos.
+
+The following routes are supported:
+
+```
+GET    /todos{?status=completed,active} - status defaults to all todos
+POST   /todos
+DELETE /todos{/id}
+PATCH  /todos{/id}
+```
+
+`POST` expects a JSON document of the form `{"title": "string", "complete?": boolean}`
+
+`PATCH` expects a similar document to `POST` with the difference that all keys are optional.
+
+All inputs are validated via `clojure.spec.alpha/conform`.
+
+#### Running the server
+
+The server is powered via [lein-ring](https://github.com/weavejester/lein-ring). Just include the `api`
+profile when running:
+
+```
+$ lein with-profile +api ring server
+```
+
 ## Testing
 
 This application leverages a mixture of traditional unit tests and generative testing via `clojure.test.check`. It's

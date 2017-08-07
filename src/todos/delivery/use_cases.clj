@@ -1,4 +1,6 @@
-(ns todos.delivery.cli.use-cases
+(ns todos.delivery.use-cases
+  "All of our deliveries will use the same dependencies - but any individual
+  delivery should be able to overrwrite these with ease"
   (:require [mount.core :refer [defstate]]
             [clojure.core.async :as async]
             [todos.core.use-case :as uc]
@@ -6,7 +8,7 @@
             [todos.core.use-case.list-todos :as lt]
             [todos.core.use-case.update-todo :as ut]
             [todos.core.use-case.delete-todo :as dt]
-            [todos.delivery.cli.storage :refer [store]]))
+            [todos.delivery.storage :refer [store]]))
 
 
 (defn close!

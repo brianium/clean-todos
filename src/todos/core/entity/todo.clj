@@ -15,6 +15,12 @@
    (make-todo (entity/make-uuid) title)))
 
 
+(defn touch
+  "Updates modified time"
+  [todo]
+  (assoc todo ::modified-at (Date.)))
+
+
 (defn complete?
   "Check if the given todo is complete"
   [todo]

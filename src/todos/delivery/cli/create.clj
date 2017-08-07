@@ -4,7 +4,7 @@
             [todos.core.entity.todo :as todo]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]
-            [todos.delivery.cli.use-cases :refer [create-todo]]))
+            [todos.delivery.use-cases :refer [create-todo]]))
 
 
 (defn- action->exit
