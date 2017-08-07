@@ -19,6 +19,11 @@
   :ret ::todo)
 
 
+(s/fdef todo/touch
+  :args (s/cat :todo ::todo)
+  :ret  ::todo)
+
+
 (s/fdef todo/complete?
   :args (s/cat :todo ::todo)
   :ret boolean?)

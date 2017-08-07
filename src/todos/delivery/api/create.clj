@@ -38,7 +38,7 @@
 (defn respond
   "Handles a request to create a new todo"
   [{:keys [body]}]
-  (let [payload (s/conform ::ts/todo-request body)]
+  (let [payload (s/conform ::ts/create-request body)]
     (if (= payload ::s/invalid)
       bad-request
       (create payload))))

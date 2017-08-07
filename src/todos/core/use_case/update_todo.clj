@@ -5,6 +5,12 @@
             [todos.core.use-case :as uc]))
 
 
+(defn- strip-nils
+  "Removes nils from a todo"
+  [todo]
+  (into {} (filter (comp some? val) todo)))
+
+
 (defn update-todo
   [{:keys [in out storage] :as dependencies}]
   (let [use-case (uc/make-use-case in out)]
@@ -15,6 +21,7 @@
           (>! out (uc/result->action :todo/update current))
           (->> {::entity/id id}
                (merge todo)
+               strip-nils
                (merge current)
                (todo/save storage)
                (uc/result->action :todo/update)

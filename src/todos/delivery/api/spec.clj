@@ -5,4 +5,5 @@
             [todos.core.entity.todo.spec]))
 
 
-(s/def ::todo-request (s/keys :req-un [::todo/title ::todo/complete?]))
+(s/def ::create-request (s/keys :req-un [::todo/title ::todo/complete?]))
+(s/def ::update-request (s/keys :opt-un [::todo/title ::todo/complete?]))

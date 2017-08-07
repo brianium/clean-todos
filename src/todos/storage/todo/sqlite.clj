@@ -50,8 +50,9 @@
 
 (defn- update-todo
   [db todo]
-  (let [id   (::entity/id todo)
-        data (dissoc (todo->row todo) :id)]
+  (let [id       (::entity/id todo)
+        modified (todo/touch todo)
+        data     (dissoc (todo->row modified) :id)]
     (try
       (j/update! db :todos data ["id = ?" id]) todo
       (catch Exception e :not-updated))))
