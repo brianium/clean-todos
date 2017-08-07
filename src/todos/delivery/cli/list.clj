@@ -5,7 +5,7 @@
             [todos.core.entity :as entity]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]
-            [todos.delivery.cli.use-cases :refer [list-todos]]))
+            [todos.delivery.use-cases :refer [list-todos]]))
 
 
 (defn- format-todo

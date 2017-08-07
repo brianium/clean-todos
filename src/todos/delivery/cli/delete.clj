@@ -1,6 +1,6 @@
 (ns todos.delivery.cli.delete
   (:require [io.aviso.ansi :refer [green red]]
-            [todos.delivery.cli.use-cases :refer [delete-todo]]
+            [todos.delivery.use-cases :refer [delete-todo]]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]))
 

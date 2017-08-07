@@ -1,4 +1,5 @@
-(ns todos.delivery.cli.storage
+(ns todos.delivery.storage
+  "For now all of our deliveries will leverage the same storage system"
   (:require [mount.core :refer [defstate]]
             [todos.storage.todo.sqlite :refer [make-storage make-db-spec]]))
 

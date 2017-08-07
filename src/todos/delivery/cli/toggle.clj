@@ -5,8 +5,8 @@
             [todos.core.entity.todo :as todo]
             [todos.core.use-case :as uc]
             [todos.core.action :as action]
-            [todos.delivery.cli.use-cases :refer [update-todo]]
-            [todos.delivery.cli.storage :refer [store]]))
+            [todos.delivery.use-cases :refer [update-todo]]
+            [todos.delivery.storage :refer [store]]))
 
 
 (defn not-found
