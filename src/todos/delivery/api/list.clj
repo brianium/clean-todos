@@ -27,9 +27,9 @@
   "Handles listing todos as json"
   [request]
   (->> request
-    status
-    (uc/put! list-todos)
-    uc/take!!
-    action->json
-    (assoc {} :data)
-    response))
+       status
+       (uc/put! list-todos)
+       uc/take!!
+       action->json
+       (assoc {} :data)
+       response))

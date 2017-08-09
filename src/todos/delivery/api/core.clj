@@ -2,6 +2,7 @@
   (:require [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.defaults :refer [api-defaults wrap-defaults]]
+            [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response]]
             [compojure.core :refer [defroutes GET POST DELETE PATCH]]
             [compojure.handler :as handler]
@@ -26,4 +27,6 @@
       wrap-params
       (wrap-json-body {:keywords? true})
       wrap-json-response
+      (wrap-cors :access-control-allow-origin [#"http://localhost:3449"]
+                 :access-control-allow-methods [:get :post :patch :delete])
       (wrap-defaults api-defaults)))

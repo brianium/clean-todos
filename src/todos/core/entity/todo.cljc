@@ -1,6 +1,12 @@
 (ns todos.core.entity.todo
-  (:require [todos.core.entity :as entity])
-  (:import (java.util Date)))
+  (:require [todos.core.entity :as entity]))
+
+
+(defn- date
+  "Creates a date in a target agnostic way"
+  []
+  #?(:clj (java.util.Date.)
+     :cljs (js/Date.)))
 
 
 (defn make-todo
@@ -9,16 +15,31 @@
    {::entity/id   id
     ::title       title
     ::complete?   false
-    ::created-at  (Date.)
-    ::modified-at (Date.)})
+    ::created-at  (date)
+    ::modified-at (date)})
   ([title]
    (make-todo (entity/make-uuid) title)))
+
+
+(defn unmap->todo
+  "Provides a way to convert a map with unqualified keys to a todo map"
+  [{:keys [id title complete? created-at modified-at]
+    :or   {id          (entity/make-uuid)
+           title       ""
+           complete?   false
+           created-at  (date)
+           modified-at (date)}}]
+  {::entity/id   id
+   ::title       title
+   ::complete?   complete?
+   ::created-at  created-at
+   ::modified-at modified-at})
 
 
 (defn touch
   "Updates modified time"
   [todo]
-  (assoc todo ::modified-at (Date.)))
+  (assoc todo ::modified-at (date)))
 
 
 (defn complete?
@@ -33,7 +54,7 @@
   (if (complete? todo)
     todo
     (merge todo {::complete? true
-                 ::modified-at (Date.)})))
+                 ::modified-at (date)})))
 
 
 (defn mark-active
@@ -42,7 +63,7 @@
   (if-not (complete? todo)
     todo
     (merge todo {::complete? false
-                 ::modified-at (Date.)})))
+                 ::modified-at (date)})))
 
 
 (defn toggle-status
@@ -86,13 +107,24 @@
   (-delete storage id))
 
 
-(def filters
-  {:completed (filter complete?)
-   :active    (filter (complement complete?))})
+(defn- filter-fn
+  [status]
+  (case status
+    :active    (complement complete?)
+    :completed complete?
+    identity))
 
 
-(defn filter-todos
+(defmulti filter-todos (fn [status todos] (map? todos)))
+
+
+(defmethod filter-todos true
   [status todos]
-  (if-let [xform (get filters status)]
-    (transduce xform conj todos)
-    todos))
+  (->> todos
+       (filter #((filter-fn status) (second %)))
+       (into {})))
+
+
+(defmethod filter-todos :default
+  [status todos]
+  (filter (filter-fn status) todos))

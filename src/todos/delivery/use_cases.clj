@@ -22,8 +22,8 @@
 (defn create-deps
   "Creates a fresh set of dependencies for a use case"
   []
-  {:in      (async/chan)
-   :out     (async/chan)
+  {:in      (async/chan 1)
+   :out     (async/chan 1)
    :storage store})
 
 

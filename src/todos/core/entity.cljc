@@ -1,5 +1,4 @@
-(ns todos.core.entity
-  (:import (java.util UUID)))
+(ns todos.core.entity)
 
 
 (defn storage-error?
@@ -20,10 +19,12 @@
 (defn make-uuid
   "Creates a new uuid"
   []
-  (UUID/randomUUID))
+  #?(:clj (java.util.UUID/randomUUID)
+     :cljs (cljs.core/random-uuid)))
 
 
 (defn string->uuid
   "Converts a uuid string to a uuid"
   [str]
-  (UUID/fromString str))
+  #?(:clj (java.util.UUID/fromString str)
+     :cljs (cljs.core/uuid str)))
