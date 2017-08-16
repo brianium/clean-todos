@@ -3,6 +3,7 @@
             [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as st]
             [clojure.test.check] ;; https://github.com/clojure-emacs/cider/issues/1841#issuecomment-266072462
+            [todos.core.entity :as e]
             [todos.core.entity.todo :as todo]
             [todos.core.entity.todo.spec :as spec]
             [todos.storage.todo.collection :refer [make-storage]]))
@@ -50,7 +51,7 @@
       (is (false? (::todo/complete? toggled))))))
 
 
-(deftest test-filter-todos
+(deftest test-filter-todos-sequential
   (let [complete (todo/mark-complete (todo/make-todo "Complete"))
         active   (todo/make-todo "Active")
         todos    [complete active]]
@@ -65,6 +66,20 @@
     (testing "defaults to all todos"
       (let [all (todo/filter-todos :unrecognized-status todos)]
         (is (= 2 (count all)))))))
+
+
+(deftest test-filter-todos-map
+  (let [complete (todo/mark-complete (todo/make-todo "Complete"))
+        active   (todo/make-todo "Active")
+        todos    (into {} [[(::e/id complete) complete] [(::e/id active) active]])]
+    (testing "filtering active todos"
+      (let [active (todo/filter-todos :active todos)]
+        (is (= 1 (count active)))
+        (is (= "Active" (::todo/title (second (first active)))))))
+    (testing "filtering complete todos"
+      (let [complete (todo/filter-todos :completed todos)]
+        (is (= 1 (count complete)))
+        (is (= "Complete" (::todo/title (second (first complete)))))))))
 
 
 (def test-storage (make-storage))

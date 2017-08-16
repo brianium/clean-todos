@@ -1,9 +1,11 @@
 (ns todos.core.entity.spec
-  (:require [clojure.spec.alpha :as s]
-            [todos.core.entity :as entity]))
+  (:require [todos.core.entity :as entity]
+            #?(:clj [clojure.spec.alpha :as s]
+               :cljs [cljs.spec.alpha :as s])))
 
 
-(s/def ::entity/id uuid?)
+(s/def ::id uuid?)
+(s/def ::entity/id ::id)
 (s/def ::entity (s/keys :req [::entity/id]))
 (s/def ::storage-error  keyword?)
 (s/def ::storage-result (s/or :data (s/or :entity ::entity :entities (s/* ::entity))
@@ -23,9 +25,9 @@
 
 (s/fdef entity/make-uuid
   :args  empty?
-  :ret  ::entity/id)
+  :ret  ::id)
 
 
 (s/fdef entity/string->uuid
   :args  (s/cat :str ::uuid-string)
-  :ret   ::entity/id)
+  :ret   ::id)

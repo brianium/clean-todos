@@ -41,7 +41,7 @@ Available Commands:
 This delivery is built to a single executble named `todos` using the [lein binplus](https://github.com/BrunoBonacci/lein-binplus) plugin. Lein can then be used to build the cli delivery using the `cli` profile:
 
 ```
-$ lein with-profile +cli bin
+$ lein with-profile cli bin
 ```
 
 ### todos.delivery.api
@@ -69,8 +69,31 @@ The server is powered via [lein-ring](https://github.com/weavejester/lein-ring).
 profile when running:
 
 ```
-$ lein with-profile +api ring server
+$ lein api
 ```
+
+### todos.delivery.web
+
+The web delivery is a re-frame app that leverages the api delivery.
+
+#### Running the web application
+
+The web app is run in a dev setting using [lein-figwheel](https://github.com/bhauman/lein-figwheel). The api
+delivery needs to be running in order to use the web delivery.
+
+I'm not a lein wizard so I wasn't able to figure out how to run both in a single command (at least in a sane way) - so in order to demo the web app first start the api server in a terminal session:
+
+```
+$ lein api
+```
+
+Then in another terminal session start the web app:
+
+```
+$ lein web
+```
+
+You should then we able to visit `http://localhost:3449` to see the re-frame app in action.
 
 ## Testing
 
@@ -81,9 +104,3 @@ pretty dern cool, so check out the test suite. Unit tests and generative tests c
 $ lein test
 ```
 
-To run tests during development - i.e tests are re-run as changes are made - use `test-refresh`.
-
-```
-$ lein test-refresh
-$ lein with-profile +cli test-refresh
-```

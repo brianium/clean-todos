@@ -1,8 +1,8 @@
 (ns todos.core.entity.todo.spec
-  (:require [clojure.spec.alpha :as s]
-            [todos.core.entity :as entity]
-            [todos.core.entity.spec :as es]
-            [todos.core.entity.todo :as todo]))
+  (:require [todos.core.entity.spec :as es]
+            [todos.core.entity.todo :as todo]
+            #?(:clj [clojure.spec.alpha :as s]
+               :cljs [cljs.spec.alpha :as s])))
 
 
 (s/def ::todo/title string?)
@@ -15,8 +15,13 @@
 
 
 (s/fdef todo/make-todo
-  :args (s/cat :id ::entity/id :title ::todo/title)
+  :args (s/cat :id ::es/id :title ::todo/title)
   :ret ::todo)
+
+
+(s/fdef todo/unmap->todo
+  :args (s/cat :map map?)
+  :ret  ::todo)
 
 
 (s/fdef todo/touch
@@ -45,7 +50,7 @@
 
 
 (s/fdef todo/fetch
-  :args (s/cat :storage ::storage :id ::entity/id)
+  :args (s/cat :storage ::storage :id ::es/id)
   :ret  ::es/storage-result)
 
 
@@ -60,7 +65,7 @@
 
 
 (s/fdef remove
-  :args (s/cat :store ::storage :id ::entity/id)
+  :args (s/cat :store ::storage :id ::es/id)
   :ret  boolean?)
 
 

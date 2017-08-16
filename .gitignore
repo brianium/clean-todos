@@ -14,3 +14,6 @@ pom.xml.asc
 .\#*
 
 .DS_Store
+*.log
+resources/public/js/
+
