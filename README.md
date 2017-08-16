@@ -127,9 +127,9 @@ src/
 	  entity/
 	  use_case/
 	    create_todo/
-		delete_todo/
-		list_todos/
-		update_todo/
+	    delete_todo/
+	    list_todos/
+	    update_todo/
 	delivery/
 	  api/ -- a simple restful api
 	  cli/ -- a command-line interface to the app
