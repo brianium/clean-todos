@@ -123,19 +123,19 @@ resources/ -- static assets leveraged by web delivery
 src/
   todos/
     core/ -- contains use cases, entities, and some simple conventions for messaging
-	  action/
-	  entity/
-	  use_case/
-	    create_todo/
-	    delete_todo/
-	    list_todos/
-	    update_todo/
-	delivery/
-	  api/ -- a simple restful api
-	  cli/ -- a command-line interface to the app
-	  web/ -- a re-frame application
-	storage/
-	  todo/ -- protocol implementations for persisting todos
+      action/
+      entity/
+      use_case/
+        create_todo/
+	delete_todo/
+	list_todos/
+	update_todo/
+    delivery/
+      api/ -- a simple restful api
+      cli/ -- a command-line interface to the app
+      web/ -- a re-frame application
+    storage/
+      todo/ -- protocol implementations for persisting todos
 ```
 
 ### On core.async
