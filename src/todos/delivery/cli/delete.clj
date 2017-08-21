@@ -1,7 +1,7 @@
 (ns todos.delivery.cli.delete
   (:require [io.aviso.ansi :refer [green red]]
+            [yoose.core :as yoose]
             [todos.delivery.use-cases :refer [delete-todo]]
-            [todos.core.use-case :as uc]
             [todos.core.action :as action]))
 
 
@@ -23,7 +23,7 @@
   "Handles executing the delete use case via the cli"
   [[id] _]
   (->> id
-    (uc/put! delete-todo)
-    (uc/take!!)
-    action->exit
-    exit))
+       (yoose/push! delete-todo)
+       (yoose/pull!!)
+       action->exit
+       exit))

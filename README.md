@@ -8,6 +8,8 @@ Running the various deliveries should be a snap once you get [leiningen](https:/
 
 If you are interested - please see the [retrospect](https://github.com/brianium/clean-todos#retrospect). One can only learn so much from the classic "todo" app, but I feel this app has given me a better understanding of the Clojure(Script) landscape as a whole.
 
+The original version of this application inspired the [yoose](https://github.com/brianium/yoose) library - a library that facilitates use case centered applications. The current version of this app leverages yoose.
+
 ## Delivery (i.e presentation for the app)
 
 The `todos.delivery` namespace contains different delivery mechanisms for clean todos - i.e cli, web, etc..

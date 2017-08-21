@@ -1,6 +1,6 @@
 (ns todos.delivery.api.delete
   (:require [ring.util.response :refer [response]]
-            [todos.core.use-case :as uc]
+            [yoose.core :as yoose]
             [todos.delivery.use-cases :refer [delete-todo]]
             [todos.core.action :as action]))
 
@@ -18,6 +18,6 @@
   "Deletes a todo and responds"
   [id]
   (->> id
-    (uc/put! delete-todo)
-    uc/take!!
-    action->response))
+       (yoose/push! delete-todo)
+       yoose/pull!!
+       action->response))

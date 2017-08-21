@@ -9,6 +9,7 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
                  [org.clojure/clojurescript "1.9.854"]
                  [org.clojure/core.async "0.3.443"]
+                 [yoose "0.1.1"]
                  [org.clojure/java.jdbc "0.7.0"]
                  [clj-time "0.14.0"]
                  [honeysql "0.9.0"]

@@ -1,7 +1,7 @@
 (ns todos.delivery.api.list
   (:require [ring.util.response :refer [response]]
+            [yoose.core :as yoose]
             [todos.delivery.use-cases :refer [list-todos]]
-            [todos.core.use-case :as uc]
             [todos.core.entity.todo :as t]
             [todos.core.entity :as e]
             [todos.core.action :as action]
@@ -28,8 +28,8 @@
   [request]
   (->> request
        status
-       (uc/put! list-todos)
-       uc/take!!
+       (yoose/push! list-todos)
+       yoose/pull!!
        action->json
        (assoc {} :data)
        response))

@@ -3,7 +3,7 @@
   delivery should be able to overrwrite these with ease"
   (:require [mount.core :refer [defstate]]
             [clojure.core.async :as async]
-            [todos.core.use-case :as uc]
+            [yoose.core :as yoose]
             [todos.core.use-case.create-todo :as ct]
             [todos.core.use-case.list-todos :as lt]
             [todos.core.use-case.update-todo :as ut]
@@ -11,33 +11,24 @@
             [todos.delivery.storage :refer [store]]))
 
 
-(defn close!
-  "Cleans up a use case.
-  TODO - consider making this part of the use case api"
-  [use-case]
-  (doseq [chan [(uc/input use-case) (uc/output use-case)]]
-    (async/close! chan)))
+(defn- create-use-case
+  [factory]
+  (let [in  (async/chan 1)
+        out (async/chan 1)]
+    (factory in out {:storage store})))
 
 
-(defn create-deps
-  "Creates a fresh set of dependencies for a use case"
-  []
-  {:in      (async/chan 1)
-   :out     (async/chan 1)
-   :storage store})
+(defstate create-todo :start (create-use-case ct/create-todo)
+                      :stop  (yoose/close! create-todo))
 
 
-(defstate create-todo :start (ct/create-todo (create-deps))
-                      :stop (close! create-todo))
+(defstate list-todos :start (create-use-case lt/list-todos)
+                     :stop  (yoose/close! list-todos))
 
 
-(defstate list-todos :start (lt/list-todos (create-deps))
-                     :stop (close! list-todos))
+(defstate update-todo :start (create-use-case ut/update-todo)
+                      :stop  (yoose/close! update-todo))
 
 
-(defstate update-todo :start (ut/update-todo (create-deps))
-                      :stop (close! update-todo))
-
-
-(defstate delete-todo :start (dt/delete-todo (create-deps))
-                      :stop  (close! delete-todo))
+(defstate delete-todo :start (create-use-case dt/delete-todo)
+                      :stop  (yoose/close! delete-todo))

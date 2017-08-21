@@ -1,9 +1,9 @@
 (ns todos.delivery.cli.toggle
   (:require [clojure.core.async :as async]
             [io.aviso.ansi :refer [red green]]
+            [yoose.core :as yoose]
             [todos.core.entity :as entity]
             [todos.core.entity.todo :as todo]
-            [todos.core.use-case :as uc]
             [todos.core.action :as action]
             [todos.delivery.use-cases :refer [update-todo]]
             [todos.delivery.storage :refer [store]]))
@@ -47,10 +47,10 @@
 (defn toggle
   [id current]
   (->> [id (todo/toggle-status current)]
-    (uc/put! update-todo)
-    (uc/take!!)
-    action->exit
-    exit))
+       (yoose/push! update-todo)
+       (yoose/pull!!)
+       action->exit
+       exit))
 
 
 (defn execute

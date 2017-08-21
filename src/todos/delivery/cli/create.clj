@@ -1,8 +1,8 @@
 (ns todos.delivery.cli.create
   (:require [clojure.core.async :as async]
             [io.aviso.ansi :refer [red green]]
+            [yoose.core :as yoose]
             [todos.core.entity.todo :as todo]
-            [todos.core.use-case :as uc]
             [todos.core.action :as action]
             [todos.delivery.use-cases :refer [create-todo]]))
 
@@ -18,10 +18,8 @@
 (defn execute
   "Exercises the create todo use case and prints results to stdout"
   [[name] _]
-  (->> name
-    todo/make-todo
-    (uc/put! create-todo))
-  (let [result                     (uc/take!! create-todo)
+  (let [entity                     (todo/make-todo name)
+        result                     (yoose/trade!! create-todo entity)
         {:keys [exit-message ok?]} (action->exit result name)]
     (println exit-message)
     (if ok? 0 1)))
