@@ -1,11 +1,11 @@
 (ns todos.delivery.api.update
   (:require [clojure.spec.alpha :as s]
             [ring.util.response :refer [response]]
+            [yoose.core :as yoose]
             [todos.delivery.api.spec :as ts]
             [todos.delivery.use-cases :refer [update-todo]]
             [todos.core.entity :as e]
             [todos.core.entity.todo :as t]
-            [todos.core.use-case :as uc]
             [todos.core.action :as action]))
 
 
@@ -29,10 +29,10 @@
   "Patches an existing todo based on the request"
   [{:keys [title complete?]} id]
   (->> { ::t/title title ::t/complete? complete? }
-    (vector id)
-    (uc/put! update-todo)
-    uc/take!!
-    action->response))
+       (vector id)
+       (yoose/push! update-todo)
+       yoose/pull!!
+       action->response))
 
 
 (defn respond
