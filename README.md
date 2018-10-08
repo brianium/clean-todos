@@ -150,7 +150,7 @@ The deliveries I created usually leveraged a put followed by a blocking take - m
 
 clojure.spec is amazing. I'm likely not leveraging it to the best of it's ability. The cool things I saw were:
 
-* Generative teting via test.check. My functions are pretty thoroughly tested by a variety of inputs.
+* Generative testing via test.check. My functions are pretty thoroughly tested by a variety of inputs.
 * Validation. The api and web deliveries use specs to validate inputs and outputs. This is especially cool
 in the re-frame app as it checks the shape of app state after every mutation. This turned up all kinds of errors
 during development.
