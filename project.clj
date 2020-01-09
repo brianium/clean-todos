@@ -48,7 +48,7 @@
                                   [ring-cors "0.1.11"]
                                   [compojure "1.6.0"]]
 
-                   :plugins [[lein-ring "0.12.5"]]
+                   :plugins [[lein-ring "0.12.0"]]
 
                    :ring {:handler todos.delivery.api.core/app
                           :init    mount.core/start
