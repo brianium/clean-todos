@@ -10,6 +10,7 @@ If you are interested - please see the [retrospect](https://github.com/brianium/
 
 The original version of this application inspired the [yoose](https://github.com/brianium/yoose) library - a library that facilitates use case centered applications. The current version of this app leverages yoose.
 
+
 ## Delivery (i.e presentation for the app)
 
 The `todos.delivery` namespace contains different delivery mechanisms for clean todos - i.e cli, web, etc..
@@ -101,6 +102,7 @@ $ lein web
 
 You should then we able to visit `http://localhost:3449` to see the re-frame app in action.
 
+
 ## Testing
 
 This application leverages a mixture of traditional unit tests and generative testing via `clojure.test.check`. It's
@@ -109,6 +111,7 @@ pretty dern cool, so check out the test suite. Unit tests and generative tests c
 ```
 $ lein test
 ```
+
 
 ## Retrospect
 
@@ -190,6 +193,24 @@ other things that I think would be cool. I may or may not ever get to any of the
 * Error handling in the web delivery. Like a good "RUSH TO MARKET APP" the web delivery just assumes all http requests will always succeed.
 * Document more of this
 
+
 ## Feedback / Pull Requests
 
 I would welcome any pull requests or general feedback on any approach taken here. I'm not sure I ever have or ever will fully grasp what a computer is, so I always welcome people telling me how to do things better :)
+
+
+## License
+
+Copyright 2017-2018, Brian Scaturro.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this code except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
